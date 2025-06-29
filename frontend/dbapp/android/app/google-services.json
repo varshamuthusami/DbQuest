@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459387286573",
+    "project_id": "dbquest-77958",
+    "storage_bucket": "dbquest-77958.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459387286573:android:a346a3cee78ff3bf7ab4a4",
+        "android_client_info": {
+          "package_name": "com.example.dbapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9OJvRbMkgBUf1pkg_lVXSDmLGpE6Es_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
