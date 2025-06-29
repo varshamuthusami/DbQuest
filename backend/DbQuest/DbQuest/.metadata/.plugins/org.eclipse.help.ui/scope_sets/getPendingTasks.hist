@@ -1,0 +1,4 @@
+#Fri Jun 20 12:50:48 IST 2025
+__DEFAULT__=false
+expression=getPendingTasks
+org.eclipse.help.ui.localSearch.master=true

@@ -1,0 +1,47 @@
+package com.dbquest.dbq.controller;
+
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.dbquest.dbq.service.DBEasyPro;
+
+@RestController
+public class EasyPro {
+	private static final Logger LOG = LoggerFactory.getLogger(DBEasyPro.class);
+	
+	@RequestMapping("/getDepartmentNamesFromEasyProVideo")
+	@ResponseBody    
+	public ArrayList<ModelMap> getDepartmentNamesFromEasyProVideo() {
+	 	LOG.info("getDepartmentNamesFromEasyProVideo");
+	 	ArrayList<ModelMap> model = DBEasyPro.getDepartmentNamesFromEasyProVideo();
+	    return model;
+	}
+	
+	@RequestMapping("/getEasyProVideoFilesBySlNo")
+	@ResponseBody    
+	public ArrayList<ModelMap> getEasyProVideoFilesBySlNo(
+			@RequestParam(value = "slNo") String slNo) {
+	 	LOG.info("getEasyProVideoFilesBySlNo");
+	 	ArrayList<ModelMap> model = DBEasyPro.getEasyProVideoFilesBySlNo(slNo);
+	    return model;
+	}
+	
+	@RequestMapping("/getVideoLinksBySlNoAndVideoNo")
+	@ResponseBody    
+	public ArrayList<ModelMap> getVideoLinksBySlNoAndVideoNo(
+			@RequestParam(value = "slNo") String slNo,
+			@RequestParam(value = "videoNo") String videoNo) {
+	 	LOG.info("getVideoLinksBySlNoAndVideoNo");
+	 	ArrayList<ModelMap> model = DBEasyPro.getVideoLinksBySlNoAndVideoNo(slNo, videoNo);
+	    return model;
+	}
+}

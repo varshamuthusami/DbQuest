@@ -1,0 +1,91 @@
+package com.dbquest.dbq.service;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import org.springframework.ui.ModelMap;
+
+import com.dbquest.dbq.utils.ConnectionManager;
+
+public class DBEasyPro {
+	
+	private static Connection conn = null;
+	
+	public static ArrayList<ModelMap> getDepartmentNamesFromEasyProVideo() {
+	    String sql = "SELECT DISTINCT d.DeptName " +
+	                 "FROM EasyProVideo ev " +
+	                 "JOIN Department d ON ev.DeptCode = d.DeptCode";
+
+	    ArrayList<ModelMap> model = new ArrayList<>();
+	    try (Connection conn = ConnectionManager.getConnection();
+	         PreparedStatement pStmt = conn.prepareStatement(sql);
+	         ResultSet rs = pStmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            ModelMap temp = new ModelMap();
+	            temp.put("deptName", rs.getString("DeptName"));
+	            model.add(temp);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return model;
+	}
+
+	public static ArrayList<ModelMap> getEasyProVideoFilesBySlNo(int slNo) {
+	    String sql = "SELECT SlNo, VideoNo, ProcessDesc " +
+	                 "FROM EasyProVideoFiles " +
+	                 "WHERE SlNo = ?";
+
+	    ArrayList<ModelMap> model = new ArrayList<>();
+	    try (Connection conn = ConnectionManager.getConnection();
+	         PreparedStatement pStmt = conn.prepareStatement(sql)) {
+
+	        pStmt.setInt(1, slNo); // Set the given SlNo
+
+	        ResultSet rs = pStmt.executeQuery();
+
+	        while (rs.next()) {
+	            ModelMap temp = new ModelMap();
+	            temp.put("slNo", rs.getInt("SlNo"));
+	            temp.put("videoNo", rs.getInt("VideoNo"));
+	            temp.put("processDesc", rs.getString("ProcessDesc"));
+	            model.add(temp);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return model;
+	}
+
+	public static ArrayList<ModelMap> getVideoLinksBySlNoAndVideoNo(int slNo, int videoNo) {
+	    String sql = "SELECT SlNo, VideoNo, VideoSeq, VideoDesc, VideoLinks " +
+	                 "FROM EasyProVideoFilesLinks " +
+	                 "WHERE SlNo = ? AND VideoNo = ?";
+
+	    ArrayList<ModelMap> model = new ArrayList<>();
+	    try (Connection conn = ConnectionManager.getConnection();
+	         PreparedStatement pStmt = conn.prepareStatement(sql)) {
+
+	        pStmt.setInt(1, slNo);
+	        pStmt.setInt(2, videoNo);
+
+	        ResultSet rs = pStmt.executeQuery();
+
+	        while (rs.next()) {
+	            ModelMap temp = new ModelMap();
+	            temp.put("slNo", rs.getInt("SlNo"));
+	            temp.put("videoNo", rs.getInt("VideoNo"));
+	            temp.put("videoSeq", rs.getInt("VideoSeq"));
+	            temp.put("videoDesc", rs.getString("VideoDesc"));
+	            temp.put("videoLinks", rs.getString("VideoLinks"));
+	            model.add(temp);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return model;
+	}
+
+}
