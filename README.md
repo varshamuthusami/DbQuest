@@ -41,8 +41,11 @@
 ## 📁 Project Structure
 
 DbQuest/
+
 ├── frontend/ # Flutter mobile app
+
 ├── backend/ # Spring Boot backend
+
 └── README.md
 
 ---
