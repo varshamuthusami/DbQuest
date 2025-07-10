@@ -120,3 +120,8 @@ DbQuest/
 
 **Varsha Muthusami**  
 Developer and Project Owner
+
+## License
+This project is licensed under the Apache License 2.0 — see the [LICENSE](./LICENSE) file for details.
+© 2025 Varsha Muthusami
+
