@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'dbquest-74b96.firebaseapp.com',
     storageBucket: 'dbquest-74b96.firebasestorage.app',
   );
+
 }

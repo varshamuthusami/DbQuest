@@ -172,32 +172,58 @@ class _AttendanceViewState extends State<AttendanceView> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: attData.isEmpty
-                    ? const Center(child: Text("No attendance records found"))
-                    : DataTable(
-                        columns: const [
-                          DataColumn(label: Text("Day")),
-                          DataColumn(label: Text("In Time")),
-                          DataColumn(label: Text("Out Time")),
-                          DataColumn(label: Text("Hours")),
-                        ],
-                        rows: attData
-                            .expand((data) => data.info)
-                            .map((entry) => DataRow(cells: [
-                                  DataCell(Text(entry.day)),
-                                  DataCell(Text(entry.inTime)),
-                                  DataCell(Text(entry.outTime)),
-                                  DataCell(Text(entry.hours)),
-                                ]))
-                            .toList(),
-                      ),
-              ),
-            ),
-          ),
+  child: LayoutBuilder(
+    builder: (context, constraints) {
+      final screenWidth = constraints.maxWidth;
+      final columnWidth = screenWidth / 4;
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: attData.isEmpty
+              ? const Center(child: Text("No attendance records found"))
+              : ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: screenWidth),
+                  child: DataTable(
+                    columnSpacing: 0, // tighter spacing
+                    columns: const [
+                      DataColumn(label: Text("Day")),
+                      DataColumn(label: Text("In Time")),
+                      DataColumn(label: Text("Out Time")),
+                      DataColumn(label: Text("Hours")),
+                    ],
+                    rows: attData
+                        .expand((data) => data.info)
+                        .map(
+                          (entry) => DataRow(cells: [
+                            DataCell(SizedBox(
+                              width: columnWidth,
+                              child: Text(entry.day),
+                            )),
+                            DataCell(SizedBox(
+                              width: columnWidth,
+                              child: Text(entry.inTime),
+                            )),
+                            DataCell(SizedBox(
+                              width: columnWidth,
+                              child: Text(entry.outTime),
+                            )),
+                            DataCell(SizedBox(
+                              width: columnWidth,
+                              child: Text(entry.hours),
+                            )),
+                          ]),
+                        )
+                        .toList(),
+                  ),
+                ),
+        ),
+      );
+    },
+  ),
+),
+
         ],
       ),
     );

@@ -425,76 +425,75 @@ class _WorkDurationBarChartState extends State<WorkDurationBarChart> {
 
         // Multi-Select Year Dropdown
 
-        
-
-        AspectRatio(
-          aspectRatio: 1,
-          child: BarChart(
-            BarChartData(
-              barGroups: List.generate(filteredData.length, (index) {
-                final item = filteredData[index];
-                final double workHours = double.parse(item['value']) / 60.0;
-                return BarChartGroupData(
-                  x: index,
-                  barRods: [
-                    BarChartRodData(
-                      toY: workHours,
-                      color: _getColorForBar(index),
-                      width: 18,
-                      borderRadius: BorderRadius.circular(0),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.5,
+          width:
+              MediaQuery.of(context).size.width * 0.9, // 70% of screen height
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: BarChart(
+              BarChartData(
+                barGroups: List.generate(filteredData.length, (index) {
+                  final item = filteredData[index];
+                  final double workHours = double.parse(item['value']) / 60.0;
+                  return BarChartGroupData(
+                    x: index,
+                    barRods: [
+                      BarChartRodData(
+                        toY: workHours,
+                        color: _getColorForBar(index),
+                        width: 18,
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                    ],
+                  );
+                }),
+                gridData: FlGridData(show: false),
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 45,
+                      getTitlesWidget: (value, meta) {
+                        return value % interval == 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 2),
+                                child: Text('${value.toInt()}h',
+                                    style: TextStyle(fontSize: 12)),
+                              )
+                            : SizedBox.shrink();
+                      },
                     ),
-                  ],
-                );
-              }),
-              gridData: FlGridData(show: false),
-              titlesData: FlTitlesData(
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 45,
-                    getTitlesWidget: (value, meta) {
-                      return value % interval == 0
-                          ? Padding(
-                              padding: const EdgeInsets.only(left: 2),
-                              child: Text('${value.toInt()}h',
-                                  style: TextStyle(fontSize: 12)),
-                            )
-                          : SizedBox.shrink();
-                    },
                   ),
                 ),
-              ),
-              barTouchData: BarTouchData(
-                touchTooltipData: BarTouchTooltipData(
-                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                    return BarTooltipItem(
-                      '${rod.toY.toStringAsFixed(1)}h', // Your text
-                      TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        backgroundColor:
-                            Colors.blueGrey, // ✅ ACTUAL WORKING PROPERTY
-                      ),
-                      // For padding/margin adjustments
-                      //margin: EdgeInsets.all(4),
-                      //padding: EdgeInsets.all(8),
-                    );
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        '${rod.toY.toStringAsFixed(1)}h',
+                        TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          backgroundColor: Colors.blueGrey,
+                        ),
+                      );
+                    },
+                    tooltipMargin: 8,
+                    tooltipPadding: EdgeInsets.all(8),
+                    fitInsideHorizontally: true,
+                    fitInsideVertically: true,
+                  ),
+                  touchCallback:
+                      (FlTouchEvent event, BarTouchResponse? response) {
+                    if (event is FlTapUpEvent &&
+                        response != null &&
+                        response.spot != null) {
+                      final int index = response.spot!.touchedBarGroupIndex;
+                      _showProjectDetails(context, filteredData[index],
+                          widget.token, widget.empID);
+                    }
                   },
-                  tooltipMargin: 8, // Space between bar and tooltip
-                  tooltipPadding: EdgeInsets.all(8), // Inner tooltip padding
-                  fitInsideHorizontally: true,
-                  fitInsideVertically: true,
                 ),
-                touchCallback:
-                    (FlTouchEvent event, BarTouchResponse? response) {
-                  if (event is FlTapUpEvent &&
-                      response != null &&
-                      response.spot != null) {
-                    final int index = response.spot!.touchedBarGroupIndex;
-                    _showProjectDetails(context, filteredData[index],
-                        widget.token, widget.empID);
-                  }
-                },
               ),
             ),
           ),
@@ -648,14 +647,12 @@ class _WorkDurationBarChartState extends State<WorkDurationBarChart> {
                       itemBuilder: (context, index) {
                         var task = filteredTasks[index];
                         return ListTile(
-                          title: Text(
-                              task['Description'] ?? "No Task Description"),
-                          subtitle:
-                              Text(
-  "${formatEntryDate(task['EntryDate'])}", style: TextStyle(color: Colors.grey),
-)
-
-                        );
+                            title: Text(
+                                task['Description'] ?? "No Task Description"),
+                            subtitle: Text(
+                              "${formatEntryDate(task['EntryDate'])}",
+                              style: TextStyle(color: Colors.grey),
+                            ));
                       },
                     ),
                   );
@@ -668,12 +665,13 @@ class _WorkDurationBarChartState extends State<WorkDurationBarChart> {
     );
   }
 }
+
 String formatEntryDate(String? rawDate) {
   if (rawDate == null || rawDate.isEmpty) return 'N/A';
   try {
     // Parse raw string
     DateTime date = DateTime.parse(rawDate);
-    
+
     // Format to '10 Apr 2024 - 7:40 PM'
     final formatter = DateFormat('d MMM yyyy - h:mm a');
     return formatter.format(date);
@@ -681,7 +679,6 @@ String formatEntryDate(String? rawDate) {
     return 'Invalid date';
   }
 }
-
 
 class BarChartScreen extends StatelessWidget {
   final String empID;
@@ -798,9 +795,9 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 //Text("Task ID: ${task["tid"]}"),
-                                Text(formatDateRange(task["sdate"], task["edate"])),
+                                Text(formatDateRange(
+                                    task["sdate"], task["edate"])),
                                 Text("${task["percent"]}% completed"),
-
                               ],
                             ),
                           );
@@ -831,7 +828,6 @@ String formatDateRange(String? start, String? end) {
     return "Invalid date format";
   }
 }
-
 
 class LeaveApprovalContent extends StatefulWidget {
   final String userID;
@@ -895,7 +891,8 @@ class _LeaveApprovalContentState extends State<LeaveApprovalContent> {
                       ),
                     ),
                     SizedBox(height: 8),
-                    Text("${leave.fromDate} - ${leave.toDate} (${leave.days} days)"),
+                    Text(
+                        "${leave.fromDate} - ${leave.toDate} (${leave.days} days)"),
                     Text("Reason: ${leave.reason}"),
                     /*
                     SizedBox(height: 8),

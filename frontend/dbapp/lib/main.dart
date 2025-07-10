@@ -1,15 +1,20 @@
 import 'package:dbapp/api_keys.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: kIsWeb ? DefaultFirebaseOptions.web : null,
+  );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
@@ -23,40 +28,44 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.blue,
-        ).copyWith(
-          secondary: Colors.white,
-          onPrimary: Colors.white,
-          onSecondary: Colors.blue,
-        ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Colors.blue, // Cursor color
-          selectionColor: Colors.blue.withOpacity(0.5), // Highlight color
-          selectionHandleColor: Colors.blue, // Handle color
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-        ),
-        bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: Colors.white,
-        ),
-        /*
+    return ScreenUtilInit(
+      designSize: const Size(360, 640), // Android mobile base size
+      minTextAdapt: true, // adapts text size for accessibility
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.blue,
+            scaffoldBackgroundColor: Colors.white,
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blue,
+            ).copyWith(
+              secondary: Colors.white,
+              onPrimary: Colors.white,
+              onSecondary: Colors.blue,
+            ),
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: Colors.blue, // Cursor color
+              selectionColor: Colors.blue.withOpacity(0.5), // Highlight color
+              selectionHandleColor: Colors.blue, // Handle color
+            ),
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+            ),
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor: Colors.white,
+            ),
+            /*
         dialogTheme: DialogTheme(
           backgroundColor: Colors.white,
         ),
 */
-        checkboxTheme: CheckboxThemeData(
-          //fillColor: MaterialStateProperty.all(Colors.blue),
-          checkColor: MaterialStateProperty.all(Colors.white),
-        ),
-        /*
+            checkboxTheme: CheckboxThemeData(
+              //fillColor: MaterialStateProperty.all(Colors.blue),
+              checkColor: MaterialStateProperty.all(Colors.white),
+            ),
+            /*
         tabBarTheme: TabBarTheme(
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white.withOpacity(0.5),
@@ -64,25 +73,27 @@ class MyApp extends StatelessWidget {
         ),
         
         */
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.blue,
+                side: BorderSide(color: Colors.blue),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue,
+              ),
+            ),
           ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.blue,
-            side: BorderSide(color: Colors.blue),
-          ),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.blue,
-          ),
-        ),
-      ),
-      home: TabBarPage(),
+          home: TabBarPage(),
+        );
+      },
     );
   }
 }
@@ -111,8 +122,6 @@ class _TabBarPageState extends State<TabBarPage>
 
   bool _isPasswordVisible = false; // Controls visibility of password
   bool _rememberMe = false; // Controls "Remember Me" checkbox
-
- 
 
   Future<void> _launchUrl(String url) async {
     try {
@@ -176,7 +185,6 @@ class _TabBarPageState extends State<TabBarPage>
     );
   }
 
-
   // Load from SharedPreferences
   void _loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
@@ -230,18 +238,19 @@ class _TabBarPageState extends State<TabBarPage>
                 );
               },
             ),
-            title: Row(
-                    children: [
-                      Image.asset(
-  'images/dbquestlogo.png',  // path to your logo image in assets
-  height: 25,
-  width: 25,
-  fit: BoxFit.contain,
-),SizedBox(width: 10),
-Text(
-              'DbQuest',
-              style: TextStyle(fontSize: 20.0),
-            ),]),
+            title: Row(children: [
+              Image.asset(
+                'images/dbquestlogo.png', // path to your logo image in assets
+                height: 25,
+                width: 25,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'DbQuest',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ]),
             bottom: PreferredSize(
                 preferredSize: Size.fromHeight(30.0),
                 child: TabBar(
@@ -270,12 +279,11 @@ Text(
                   child: Row(
                     children: [
                       Image.asset(
-  'images/dbquestlogo.png',  // path to your logo image in assets
-  height: 25,
-  width: 25,
-  fit: BoxFit.contain,
-),
-
+                        'images/dbquestlogo.png', // path to your logo image in assets
+                        height: 25,
+                        width: 25,
+                        fit: BoxFit.contain,
+                      ),
                       SizedBox(width: 10),
                       Text(
                         'DbQuest',
@@ -494,9 +502,9 @@ Text(
     );
   }
 
-  
- 
   Widget aboutusmethod() {
+    final screenWidth = MediaQuery.of(context).size.width;
+final videoWidth = screenWidth > 700 ? 600.0 : screenWidth * 0.9;
     return SafeArea(
       child: SingleChildScrollView(
         padding: EdgeInsets.all(10),
@@ -507,22 +515,31 @@ Text(
             if (_isInitialized)
               Column(
                 children: [
-                  AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
-                  ),
+                  
+
+SizedBox(
+  width: videoWidth,
+  child: AspectRatio(
+    aspectRatio: _controller.value.aspectRatio,
+    child: VideoPlayer(_controller),
+  ),
+),
+
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
                         icon: Icon(
-                          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                          _controller.value.isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow,
                         ),
                         onPressed: _togglePlayPause,
                       ),
                       IconButton(
-                        icon: Icon(_isMuted ? Icons.volume_off : Icons.volume_up),
+                        icon:
+                            Icon(_isMuted ? Icons.volume_off : Icons.volume_up),
                         onPressed: _toggleMute,
                       ),
                       IconButton(
@@ -535,7 +552,6 @@ Text(
               )
             else
               CircularProgressIndicator(),
-
             const SizedBox(height: 10),
             _buildServiceSection(
               icon: Icons.summarize,
@@ -1011,46 +1027,70 @@ class _EasyProTabState extends State<EasyProTab> {
           ),
           SizedBox(height: 24),
           Card(
-  elevation: 4, // controls the shadow
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  child: ExpansionTile(
-    title: Text(
-      'Modules',
-      style: TextStyle(fontWeight: FontWeight.bold),
-    ),
-    children: departmentList.map((dept) {
-      final deptName = dept['deptName'];
-      final slNo = int.tryParse(dept['SlNo']) ?? 0;
+            elevation: 4, // controls the shadow
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            child: ExpansionTile(
+              title: Text(
+                'Modules',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              children: departmentList.map((dept) {
+                final deptName = dept['deptName'];
+                final slNo = int.tryParse(dept['SlNo']) ?? 0;
 
-      return ListTile(
-        title: Text(deptName),
-        onTap: () => showVideoProcessesDialog(slNo),
-      );
-    }).toList(),
-  ),
-)
-,
+                return ListTile(
+                  title: Text(deptName),
+                  onTap: () => showVideoProcessesDialog(slNo),
+                );
+              }).toList(),
+            ),
+          ),
           SizedBox(height: 24),
           Text(
-          "Preview",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            "Preview",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+      borderRadius: BorderRadius.circular(8.r),
+      child: SizedBox(
+        width: 300.w, // Adjust width as needed
+        height: 200.h, // Maintain aspect ratio or fixed height
+        child: Image.asset(
+          "images/graph1.jpg",
+          fit: BoxFit.contain,
         ),
-        const SizedBox(height: 12),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.asset("images/graph1.jpg"),
-        ),
-        SizedBox(height: 12),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.asset("images/graph2.png"),
-        ),
-        SizedBox(height: 12),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.asset("images/graph3.png"),
-        ),
+      ),
+    ),
 
+    SizedBox(height: 12.h),
+
+    ClipRRect(
+      borderRadius: BorderRadius.circular(8.r),
+      child: SizedBox(
+        width: 300.w,
+        height: 200.h,
+        child: Image.asset(
+          "images/graph2.png",
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
+
+    SizedBox(height: 12.h),
+
+    ClipRRect(
+      borderRadius: BorderRadius.circular(8.r),
+      child: SizedBox(
+        width: 300.w,
+        height: 200.h,
+        child: Image.asset(
+          "images/graph3.png",
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
         ],
       ),
     );

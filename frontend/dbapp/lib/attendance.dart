@@ -168,57 +168,81 @@ Widget build(BuildContext context) {
               ),
               // 🧾 Attendance list
               Expanded(
-                child: ListView.builder(
-                  itemCount: groupedData.keys.length,
-                  itemBuilder: (context, index) {
-                    final month = groupedData.keys.elementAt(index);
-                    final records = groupedData[month]!;
+  child: ListView.builder(
+    itemCount: groupedData.keys.length,
+    itemBuilder: (context, index) {
+      final month = groupedData.keys.elementAt(index);
+      final records = groupedData[month]!;
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              month,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              columns: const [
-                                DataColumn(label: Text('Date')),
-                                DataColumn(label: Text('Day')),
-                                DataColumn(label: Text('In Time')),
-                                DataColumn(label: Text('Out Time')),
-                                DataColumn(label: Text('Hours')),
-                              ],
-                              rows: records.map((record) {
-                                return DataRow(
-                                  cells: [
-                                    DataCell(Text(record['Date']!)),
-                                    DataCell(Text(record['Day']!)),
-                                    DataCell(Text(record['InTime']!)),
-                                    DataCell(Text(record['OutTime']!)),
-                                    DataCell(Text(record['Hours']!)),
-                                  ],
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                month,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
                 ),
               ),
+            ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // total width of screen
+                double screenWidth = constraints.maxWidth;
+                // 5 columns → divide equally
+                double columnWidth = screenWidth / 5;
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: screenWidth),
+                    child: DataTable(
+                      columnSpacing: 0,
+                      columns: const [
+                        DataColumn(label: Text('Date')),
+                        DataColumn(label: Text('Day')),
+                        DataColumn(label: Text('In Time')),
+                        DataColumn(label: Text('Out Time')),
+                        DataColumn(label: Text('Hours')),
+                      ],
+                      rows: records.map((record) {
+                        return DataRow(
+                          cells: [
+                            DataCell(SizedBox(
+                                width: columnWidth,
+                                child: Text(record['Date']!))),
+                            DataCell(SizedBox(
+                                width: columnWidth,
+                                child: Text(record['Day']!))),
+                            DataCell(SizedBox(
+                                width: columnWidth,
+                                child: Text(record['InTime']!))),
+                            DataCell(SizedBox(
+                                width: columnWidth,
+                                child: Text(record['OutTime']!))),
+                            DataCell(SizedBox(
+                                width: columnWidth,
+                                child: Text(record['Hours']!))),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  ),
+),
+
             ],
           );
         }

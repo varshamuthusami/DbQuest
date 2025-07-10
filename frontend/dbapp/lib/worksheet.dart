@@ -200,6 +200,29 @@ class _DropdownScreenState extends State<DropdownScreen> {
     return file;
   }
 
+  String formatTime(String rawTime) {
+  try {
+    final timeParts = rawTime.split(':');
+    final hour = int.parse(timeParts[0]);
+    final minute = int.parse(timeParts[1]);
+
+    final timeOfDay = TimeOfDay(hour: hour, minute: minute);
+    final now = DateTime.now();
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+    );
+
+    return DateFormat('hh:mm a').format(dateTime); // e.g., 02:30 PM
+  } catch (e) {
+    return rawTime;
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -339,7 +362,7 @@ class _DropdownScreenState extends State<DropdownScreen> {
                                             fontWeight: FontWeight.bold)),
                                     Text("File: ${subTask["wref"]}"),
                                     Text(
-                                        "Start: ${subTask["stime"]}\nEnd: ${subTask["etime"]}"),
+                                        "Start: ${formatTime(subTask["stime"]!)}\nEnd: ${formatTime(subTask["etime"]!)}"),
                                   ],
                                 ),
                               ),

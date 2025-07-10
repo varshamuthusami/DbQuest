@@ -31,6 +31,54 @@
 
 ---
 
+## 🖼️ Screenshots
+
+### Login Page
+![Login page](assets/screenshots/login_page.jpeg)
+
+### Main Page Sidebar
+![Main page sidebar](assets/screenshots/main_page_sidebar.jpeg)
+
+### Bar Chart – Displays No. of Hours Worked Per Project
+![Barchart](assets/screenshots/homepage_barchart.jpeg)
+
+### Tasks Done in Selected Project
+![Display tasks done](assets/screenshots/barchart_project_tasks.jpeg)
+
+### Home Page Navigation Drawer
+![Home sidebar](assets/screenshots/homepage_sidebar.jpeg)
+
+### Employee Profile
+![Employee profile](assets/screenshots/employee_profile.jpeg)
+
+### Attendance Page
+![Attendance page](assets/screenshots/attendance_page.jpeg)
+
+### Customer Details
+![Customer details](assets/screenshots/customer_details_page.jpeg)
+
+### Project Task View
+![Project tasks](assets/screenshots/project_tasks_page.jpeg)
+
+### Worksheet Details
+![Worksheet page](assets/screenshots/worksheet_page.jpeg)
+
+### View Attendance
+![View attendance](assets/screenshots/view_attendance.jpeg)
+
+### View Worksheet
+![View worksheet](assets/screenshots/view_worksheet.jpeg)
+
+### Add Leave Request
+![Leave request](assets/screenshots/adding_leave_request.jpeg)
+
+### Change Password
+![Change password](assets/screenshots/change_password.jpeg)
+
+### Logout Confirmation
+![Logout popup](assets/screenshots/logout_popup.jpeg)
+
+---
 
 ## 🛠 Tech Stack
 

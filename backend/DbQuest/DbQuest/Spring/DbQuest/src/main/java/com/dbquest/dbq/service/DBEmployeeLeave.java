@@ -19,9 +19,9 @@ public class DBEmployeeLeave {
 
 private static Connection conn = null;
 
-private static final double OFFICE_LAT = 10.6573;
-private static final double OFFICE_LNG = 77.0107;
-private static final double RADIUS_METERS = 100.0;
+private static final double OFFICE_LAT = 10.664918;
+private static final double OFFICE_LNG = 77.003164;
+private static final double RADIUS_METERS = 300.0;
 
 public  static boolean isWithinOffice(double userLat, double userLng) {
     double distance = calculateDistance(OFFICE_LAT, OFFICE_LNG, userLat, userLng);
@@ -67,7 +67,9 @@ private static double calculateDistance(double lat1, double lng1, double lat2, d
                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                Math.sin(dLng/2) * Math.sin(dLng/2);
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    System.out.println("Calculated distance");
     return earthRadius * c;
+    
 }
 
 public static ArrayList<ModelMap> getApprovers(String empId) {
