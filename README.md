@@ -1,3 +1,4 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 # DbQuest ERP System
 
 **DbQuest** is an internal ERP system built for company employees to manage their daily tasks, project tracking, and time management efficiently. It offers a simple, interactive interface backed by powerful features for productivity and reporting.
